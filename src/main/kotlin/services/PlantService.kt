@@ -50,7 +50,7 @@ class PlantService(private val plantRepository: IPlantRepository) {
         // Buat object penampung
         val plantReq = PlantRequest()
 
-        val multipartData = call.receiveMultipart(formFieldLimit = 1024 * 1024 * 100)
+        val multipartData = call.receiveMultipart(formFieldLimit = 1024 * 1024 * 5)
         multipartData.forEachPart { part ->
             when (part) {
                 // Ambil request berupa teks
@@ -72,16 +72,17 @@ class PlantService(private val plantRepository: IPlantRepository) {
 
                     val fileName = UUID.randomUUID().toString() + ext
                     val filePath = "uploads/plants/$fileName"
-                    plantReq.pathGambar = filePath
 
                     val file = File(filePath)
                     file.parentFile.mkdirs() // pastikan folder ada
 
                     part.provider().copyAndClose(file.writeChannel())
+                    plantReq.pathGambar = filePath
                 }
 
                 else -> {}
             }
+
             part.dispose()
         }
 
