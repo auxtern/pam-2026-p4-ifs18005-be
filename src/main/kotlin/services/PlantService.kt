@@ -53,7 +53,6 @@ class PlantService(private val plantRepository: IPlantRepository) {
         val multipartData = call.receiveMultipart(formFieldLimit = 1024 * 1024 * 100)
         multipartData.forEachPart { part ->
             when (part) {
-
                 // Ambil request berupa teks
                 is PartData.FormItem -> {
                     when (part.name) {
