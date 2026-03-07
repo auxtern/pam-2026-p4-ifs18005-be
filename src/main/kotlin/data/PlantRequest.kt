@@ -10,25 +10,24 @@ data class PlantRequest(
     var manfaat: String = "",
     var efekSamping: String = "",
     var pathGambar: String = "",
-){
+) {
     fun toMap(): Map<String, Any?> {
         return mapOf(
-            "nama" to nama,
-            "deskripsi" to deskripsi,
-            "manfaat" to manfaat,
+            "nama"        to nama,
+            "deskripsi"   to deskripsi,
+            "manfaat"     to manfaat,
             "efekSamping" to efekSamping,
-            "pathGambar" to pathGambar
+            "pathGambar"  to pathGambar
         )
     }
 
     fun toEntity(): Plant {
         return Plant(
-            nama = nama,
-            deskripsi = deskripsi,
-            manfaat = manfaat,
+            nama        = nama,
+            deskripsi   = deskripsi,
+            manfaat     = manfaat,
             efekSamping = efekSamping,
-            pathGambar =  pathGambar,
+            pathGambar  = pathGambar,
         )
     }
-
 }

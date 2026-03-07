@@ -8,9 +8,10 @@ import java.util.UUID
 
 @Serializable
 data class Plant(
-    var id : String = UUID.randomUUID().toString(),
+    var id: String = UUID.randomUUID().toString(),
     var nama: String,
-    var pathGambar: String,
+    var pathGambar: String,   // Path relatif file di server, contoh: "uploads/plants/uuid.png"
+    var gambar: String = "", // URL publik yang dapat diakses langsung, contoh: "http://host/static/plants/uuid.png"
     var deskripsi: String,
     var manfaat: String,
     var efekSamping: String,

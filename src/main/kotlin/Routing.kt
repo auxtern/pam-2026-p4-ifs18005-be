@@ -34,7 +34,7 @@ fun Application.configureRouting() {
         // Tangkap semua Throwable lainnya
         exception<Throwable> { call, cause ->
             call.respond(
-                status = HttpStatusCode.fromValue(500),
+                status = HttpStatusCode.InternalServerError,
                 message = ErrorResponse(
                     status = "error",
                     message = cause.message ?: "Unknown error",
@@ -67,16 +67,20 @@ fun Application.configureRouting() {
                 plantService.deletePlant(call)
             }
 
+            // Endpoint kompatibilitas — gambar juga dapat diakses langsung
+            // melalui URL "/static/plants/{filename}" tanpa memanggil endpoint ini
             get("/{id}/image") {
                 plantService.getPlantImage(call)
             }
         }
 
         // Route Profile
-        route("/profile"){
+        route("/profile") {
             get {
                 profileService.getProfile(call)
             }
+            // Endpoint kompatibilitas — foto profil juga dapat diakses langsung
+            // melalui URL "/static/profile/me.png" tanpa memanggil endpoint ini
             get("/photo") {
                 profileService.getProfilePhoto(call)
             }

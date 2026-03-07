@@ -11,39 +11,37 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.lowerCase
 import java.util.UUID
 
-class PlantRepository : IPlantRepository {
+class PlantRepository(private val baseUrl: String) : IPlantRepository {
+
     override suspend fun getPlants(search: String): List<Plant> = suspendTransaction {
         if (search.isBlank()) {
             PlantDAO.all()
                 .orderBy(PlantTable.createdAt to SortOrder.DESC)
                 .limit(20)
-                .map(::daoToModel)
+                .map { daoToModel(it, baseUrl) }
         } else {
             val keyword = "%${search.lowercase()}%"
-
             PlantDAO
-                .find {
-                    PlantTable.nama.lowerCase() like keyword
-                }
+                .find { PlantTable.nama.lowerCase() like keyword }
                 .orderBy(PlantTable.nama to SortOrder.ASC)
                 .limit(20)
-                .map(::daoToModel)
+                .map { daoToModel(it, baseUrl) }
         }
     }
 
     override suspend fun getPlantById(id: String): Plant? = suspendTransaction {
         PlantDAO
-            .find { (PlantTable.id eq UUID.fromString(id)) }
+            .find { PlantTable.id eq UUID.fromString(id) }
             .limit(1)
-            .map(::daoToModel)
+            .map { daoToModel(it, baseUrl) }
             .firstOrNull()
     }
 
     override suspend fun getPlantByName(name: String): Plant? = suspendTransaction {
         PlantDAO
-            .find { (PlantTable.nama eq name) }
+            .find { PlantTable.nama eq name }
             .limit(1)
-            .map(::daoToModel)
+            .map { daoToModel(it, baseUrl) }
             .firstOrNull()
     }
 
@@ -57,7 +55,6 @@ class PlantRepository : IPlantRepository {
             createdAt = plant.createdAt
             updatedAt = plant.updatedAt
         }
-
         plantDAO.id.value.toString()
     }
 
@@ -86,5 +83,4 @@ class PlantRepository : IPlantRepository {
         }
         rowsDeleted == 1
     }
-
 }

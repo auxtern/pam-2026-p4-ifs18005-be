@@ -12,3 +12,6 @@ ktor:
     name: ${DB_NAME}
     user: ${DB_USER}
     password: ${DB_PASSWORD}
+
+  app:
+    baseUrl: ${APP_BASE_URL}
